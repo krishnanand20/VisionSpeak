@@ -3,7 +3,7 @@ AI-Powered Multi-Language OCR with Instant Summarization &amp; Speech
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Project Information: VisionSpeak 
+Project Information: Web Application Featuring Optical Character Recognition, Language Detection, Summarization, and Text-to-Speech Functionality 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
