@@ -13,6 +13,8 @@ Need to Work:
 3) Pre-process Dataset 
 4) Prepare the dataset for training 
 
+Add to report: scalable ML pipeline for real-time document processing in enterprises for accessibility and workflow optimization.
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 For Unsupported Language: Use NLLB (unkown) ---> T5(English) ----> NLLB (Unkown)
