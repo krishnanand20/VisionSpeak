@@ -17,7 +17,7 @@ Add to report: scalable ML pipeline for real-time document processing in enterpr
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-For Unsupported Language: Use fastext (unpopular language detection) --> NLLB (unpopular lang translation to eng ) ---> T5 / ( Summerization in English) ----> NLLB ( Convert to unpopular lang)
+For Unsupported Language: Use fasttext (unpopular language detection) --> NLLB (unpopular lang translation to eng ) ---> T5 / ( Summerization in English and using TTS.api voice synthesis in English) ----> NLLB ( Convert to unpopular lang).
 
 Popular language / Supported by t5: We will directly call the required models which is best suited for the specific language by passing it as a parameter.
 
@@ -25,42 +25,32 @@ Popular language / Supported by t5: We will directly call the required models wh
 
 Planned OCR Network Architecture (Final Model)
 
-✅ ResNet-100 + CRNN (Convolutional Recurrent Neural Network)
-	•	Architecture Components:
-	•	ResNet-100 as the feature extractor (captures text patterns in complex document images).
-	•	Bidirectional LSTM (BiLSTM) for sequence modeling (handles multi-line and handwritten text).
+✅ Final Model: ResNet-100 + CRNN + BiLSTM + CTC
+	•	Network Architecture:
+	•	ResNet-100 (Deep CNN) as a feature extractor (captures text patterns and structures).
+	•	CRNN (Convolutional Recurrent Neural Network) for sequence modeling.
+	•	BiLSTM (Bidirectional Long Short-Term Memory) to handle context in handwritten & multi-line text.
 	•	CTC (Connectionist Temporal Classification) Loss for end-to-end text decoding.
-	•	Reason for Selection:
-	•	Performs well on both printed and handwritten text.
-	•	Handles noisy, distorted, and irregular text layouts better than traditional OCR models.
+Why This Model?
+	•	Strong performance on both printed and handwritten text.
+	•	Handles noisy, distorted, and irregular layouts better than traditional OCR.
+	•	Comparison with ResNet-50 + CRNN evaluates the impact of depth on OCR accuracy.
 
-Intermediate Model: TrOCR (Transformer OCR)
+1️⃣ Baseline Model 1: ResNet-50 + CRNN + BiLSTM + CTC
+	•	Network Architecture:
+	•	ResNet-50 (CNN) as a shallower feature extractor.
+	•	CRNN + BiLSTM + CTC for text sequence modeling (same as the final model).
+	•	Purpose of Comparison:
+	•	Tests how network depth impacts OCR performance.
+	•	Helps determine if ResNet-100’s additional complexity is justified.
+	•	Measures trade-offs in accuracy vs. computational cost.
 
-✅ Architecture:
-	•	ViT (Vision Transformer) Encoder: Extracts image features like CNNs but learns contextual relationships better.
-	•	Transformer Decoder: Autoregressive text generation like NLP-based Transformers (e.g., GPT).
-
-✅ Strengths:
-	•	State-of-the-art for printed text recognition.
-	•	Better at handling irregular layouts than CNN-based OCR.
-	•	Can recognize characters in a contextual manner (avoids character-level errors).
-
-❌ Weaknesses:
-	•	High computational cost (requires a strong GPU).
-	•	Not as optimized for handwritten text as CRNN-based models.
-	•	Longer inference time than CNN-based models.
-
-🔹 Why Compare?
-	•	TrOCR is a Transformer-based deep learning alternative that helps evaluate if CNN + LSTM (ResNet-100 + CRNN) or Transformers provide better generalization for OCR tasks.
-	•	It provides a more modern benchmark compared to traditional CNN-based architectures.
-
-
-Baseline : Tesseract OCR (Traditional Rule-Based Model)
-	•	Architecture:
-	•	Uses rule-based character segmentation and heuristic-based text recognition.
-	•	Reason for Comparison:
-	•	Tesseract is a widely used industry standard, making it a strong baseline.
-	•	Helps demonstrate how much deep learning improves OCR accuracy over traditional methods.
-	* Tesseract OCR, Best for showing improvement over traditional OCR. If you want to demonstrate 
-	    how deep learning-based OCR outperforms classical methods, this is the best choice.
+2️⃣ Baseline Model 2: TrOCR (Transformer-Based OCR)
+	•	Network Architecture:
+	•	ViT (Vision Transformer) Encoder replaces CNN for feature extraction.
+	•	Transformer Decoder for text sequence generation (similar to GPT).
+	•	Purpose of Comparison:
+	•	Tests whether CNN + LSTM (ResNet-100 + CRNN) or Transformers generalize better for OCR tasks.
+	•	Evaluates state-of-the-art Transformer-based OCR.
+	•	Stronger on printed text but requires higher computational power.
 
