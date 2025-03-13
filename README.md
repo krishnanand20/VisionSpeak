@@ -17,8 +17,9 @@ Add to report: scalable ML pipeline for real-time document processing in enterpr
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-For Unsupported Language: Use NLLB (unkown) ---> T5(English) ----> NLLB (Unkown)
-Supported by t5: We will directly call the required models which is best suited for the specific language by passing it as a parameter.
+For Unsupported Language: Use fastext (unpopular language detection) --> NLLB (unpopular lang translation to eng ) ---> T5 / ( Summerization in English) ----> NLLB ( Convert to unpopular lang)
+
+Popular language / Supported by t5: We will directly call the required models which is best suited for the specific language by passing it as a parameter.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -54,7 +55,7 @@ Intermediate Model: TrOCR (Transformer OCR)
 	•	It provides a more modern benchmark compared to traditional CNN-based architectures.
 
 
-2️⃣ Baseline : Tesseract OCR (Traditional Rule-Based Model)
+Baseline : Tesseract OCR (Traditional Rule-Based Model)
 	•	Architecture:
 	•	Uses rule-based character segmentation and heuristic-based text recognition.
 	•	Reason for Comparison:
