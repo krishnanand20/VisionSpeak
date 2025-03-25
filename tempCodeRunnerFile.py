@@ -19,19 +19,12 @@ for i in range(num_rows):
     )
 data = pd.DataFrame(data)
 
-# Display the data with appropriate formatting
-if st.checkbox("Enable editing"):
-    edited_data = st.experimental_data_editor(data, use_container_width=True)
-else:
-    # Render the dataframe with HTML for the "Preview" column
-    def render_html_table(df):
-        html = df.to_html(
-            escape=False,
-            formatters={
-                "Preview": lambda x: f'<img src="{x}" width="100">',
-                "Progress": lambda x: f'{x}%',
-            },
-        )
-        return html
+config = {
+    "Preview": st.column_config.ImageColumn(),
+    "Progress": st.column_config.ProgressColumn(),
+}
 
-    st.write(render_html_table(data), unsafe_allow_html=True)
+if st.toggle("Enable editing"):
+    edited_data = st.data_editor(data, column_config=config, use_container_width=True)
+else:
+    st.dataframe(data, column_config=config, use_container_width=True)
