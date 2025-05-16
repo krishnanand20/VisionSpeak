@@ -98,9 +98,6 @@ def segment_lines(image_path):
 
     return line_images
 
-''' this is correct '''
-
-'''
 # inference function to extract text from the image using the trained OCR model
 def extract_text_from_image(image_path, model_path="best_model_resnet101_v2.pth"):
     # Ensuring uniformity in device usage because MPS is not widely supported, e.g., on ARM-based Macs
@@ -140,56 +137,8 @@ def extract_text_from_image(image_path, model_path="best_model_resnet101_v2.pth"
             cleaned = re.sub(r'<(en|hi)[^>]*>', '', corrected, flags=re.IGNORECASE)
             cleaned = re.sub(r'[<>]+', '', cleaned)
             cleaned = cleaned.strip()
-            cleaned = re.sub(r'^(send|this)\b\s*', '', cleaned, flags=re.IGNORECASE)  
+            cleaned = re.sub(r'^(send|this)\b\s*', '', cleaned, flags=re.IGNORECASE) 
 
             results.append(cleaned)
 
     return "\n".join(results)
-
-'''
-
-# inference function to extract text from the image using the trained OCR model
-def extract_text_from_image(image_path, model_path="best_model_resnet101_v2.pth"):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
-    checkpoint = torch.load(model_path, map_location=device)
-
-    tokenizer = OCRTokenizer(from_config=checkpoint['tokenizer_config'])
-    model = CRNN_OCR_ResNet101_v2(num_classes=checkpoint['vocab_size'])
-    model.load_state_dict(checkpoint['model_state_dict'])
-    model = model.to(device)
-    model.eval()
-
-    line_images = segment_lines(image_path)
-    results = []
-
-    for line in line_images:
-        processed = preprocess_line_image(line)
-        tensor = torch.tensor(processed, dtype=torch.float32).unsqueeze(0).to(device)
-
-        with torch.no_grad():
-            logits = model(tensor)
-            predictions = logits.softmax(2).argmax(2).permute(1, 0)
-            decoded = tokenizer.decode(predictions[0].cpu().numpy())
-
-            # ✅ Inject custom string if Hindi tag detected
-            if re.search(r'(<?\s*h+i+\s*>?)', decoded, re.IGNORECASE):
-                return """नाटक मं भि कहाणी ही प्रमुख होती है किंतु इसमे कहनी अथवा उपनयास की तरह किसी
-घटना का वरणन नही होता बलकि उस कहाणी के पात्रों द्वारा संवाद बुलवाकर और अभिनय के 
-माध्यम से स्तिथ का वास्तवक चित्रन करने का प्रयास किया जाता ह
-नाटक की भाशा बोलचाल के अत्यंत करीब होती हे इसलिये यह साधरन से साधारण मनुष्य को भि समझ मं 
-आ जाति है और यदी न भी आये तो नाटक के पात्रों के अभीनय पात्रानुकुल भाशा से वह
-स्पस्ट हो जाती हे नाटक मे लेखख पात्रो के माध्यम से अपनी बात कहलवाता हे"""
-            if "<en>" in decoded.lower():
-                corrected = symspell_correction(decoded)
-            else:
-                corrected = decoded
-
-            cleaned = re.sub(r'<(en|hi)[^>]*>', '', corrected, flags=re.IGNORECASE)
-            cleaned = re.sub(r'[<>]+', '', cleaned)
-            cleaned = cleaned.strip()
-            cleaned = re.sub(r'^(send|this)\b\s*', '', cleaned, flags=re.IGNORECASE)  
-
-            results.append(cleaned)
-
-    return "\n".join(results)
-

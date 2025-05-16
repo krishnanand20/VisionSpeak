@@ -1,26 +1,21 @@
-from TTS.utils.manage import ModelManager
-from TTS.utils.synthesizer import Synthesizer
-import tempfile
+#!/bin/bash
 
-# Define paths
-MODEL_PATH = "models/hindi_vakyansh/model.pth"
-CONFIG_PATH = "models/hindi_vakyansh/config.json"
+# Step 1: Set Python 3.11 path (Homebrew)
+PY311=/opt/homebrew/opt/python@3.11/bin/python3
+PIP311=/opt/homebrew/opt/python@3.11/bin/pip3
 
-# Optional: vocoder (or use Griffin-Lim fallback)
-VOCODER_PATH = None
-VOCODER_CONFIG_PATH = None
+# Step 2: Download sentencepiece wheel for Python 3.11 macOS arm64
+echo "📥 Downloading sentencepiece wheel..."
+curl -L -o sentencepiece.whl https://files.pythonhosted.org/packages/1e/69/53b1b3cb23686bc78e967c7d51d4174fdb7bd2dbe388b06600f7b2b85800/sentencepiece-0.1.99-cp311-cp311-macosx_11_0_arm64.whl
 
-# Load synthesizer
-synthesizer = Synthesizer(
-    tts_checkpoint=MODEL_PATH,
-    tts_config_path=CONFIG_PATH,
-    vocoder_checkpoint=VOCODER_PATH,
-    vocoder_config=VOCODER_CONFIG_PATH,
-    use_cuda=False
-)
+# Step 3: Install wheel with pip3 + override Homebrew protection
+echo "📦 Installing sentencepiece..."
+$PIP311 install ./sentencepiece.whl --break-system-packages
 
-# Generate audio
-text = "यह एक परीक्षण वाक्य है"
-with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-    synthesizer.save_wav(text, f.name)
-    print("✅ Audio saved at:", f.name)
+# Step 4: Optional - install your other dependencies
+echo "📦 Installing project dependencies..."
+$PIP311 install -r requirements.txt --break-system-packages
+
+# Step 5: Run the app using Python 3.11
+echo "🚀 Launching app with Python 3.11..."
+$PY311 -m streamlit run app.py

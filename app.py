@@ -68,7 +68,7 @@ div[data-testid="stFileUploader"] > label {
 
 #  Header Section #
 st.markdown("<h1>VisionSpeak</h1>", unsafe_allow_html=True)
-st.markdown("<h4>AI-powered Document Processor: OCR, Summarization, and Text-to-Speech</h4>", unsafe_allow_html=True)
+st.markdown("<h4>AI-powered Document Processor: OCR,Language Detector,Summarization, and Text-to-Speech</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
 # doxument upload section 
